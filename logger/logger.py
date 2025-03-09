@@ -4,7 +4,7 @@ from random import randrange
 import sqlite3
 import atexit
 
-LOGGER_INTERVAL = 1
+LOGGER_INTERVAL = 0.1
 
 def exit_handler():
     '''
@@ -15,6 +15,7 @@ def exit_handler():
     cursor.close()
     conn.commit()
     conn.close()
+    print("Shutdown logger.")
 
 def generate_data():
     '''

@@ -6,18 +6,19 @@ import gzip
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 
-COMPRESS_THRESHOLD = 30
+COMPRESS_THRESHOLD = 300
 
 def exit_handler():
     '''
         Close the database connection on exit.
     '''
-    global conn, sched, cursor
     print("Shutting down compressor.")
+    global conn, sched, cursor
+    cursor.close()
     conn.commit()
     conn.close()
     sched.shutdown()
-
+    print("Shutdown compressor.")
 
 def deleteFirstNEntries(N):
     '''
