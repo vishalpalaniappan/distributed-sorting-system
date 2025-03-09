@@ -1,6 +1,10 @@
 import sqlite3
 import atexit
 import time
+import json
+import gzip
+import os
+import math
 from apscheduler.schedulers.background import BackgroundScheduler
 
 COMPRESS_THRESHOLD = 30
@@ -64,13 +68,23 @@ def compress():
 
     if count >= COMPRESS_THRESHOLD:
         entries = getFirstNEntries(COMPRESS_THRESHOLD)
-        # ADD COMPRESSION LOGIC HERE
+
+        # Compression Files
+        startTs = round(float(entries[0][0].replace('"', "")))
+        fileName = "../compressed_data/" + str(startTs) + ".gz"
+
+        with gzip.open(fileName, 'wb') as f:
+            f.write(json.dumps(entries).encode())
+            
         deleteFirstNEntries(COMPRESS_THRESHOLD)
         
 def main():
     '''
         Runs the main loop.
     '''
+    if (not os.path.exists("../compressed_data/")):
+        os.mkdir("../compressed_data/")
+
     global conn, sched, cursor
     conn = sqlite3.connect("../data.db", check_same_thread=False)
     cursor = conn.cursor()
