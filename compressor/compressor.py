@@ -8,10 +8,11 @@ def exit_handler():
     '''
         Close the database connection on exit.
     '''
-    global conn, cursor
+    global conn, sched, cursor
     print("Shutting down compressor.")
     conn.commit()
     conn.close()
+    sched.shutdown()
 
 def getFirstNEntries():
     '''
