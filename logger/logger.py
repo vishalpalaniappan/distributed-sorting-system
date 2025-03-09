@@ -4,6 +4,8 @@ from random import randrange
 import sqlite3
 import atexit
 
+LOGGER_INTERVAL = 1
+
 def exit_handler():
     '''
         Close the database connection on exit.
@@ -60,7 +62,7 @@ def run_logger():
         data = generate_data()
         print(data)
         execute_cursor(data)
-        time.sleep(1)
+        time.sleep(LOGGER_INTERVAL)
 
 if __name__ == "__main__":
     atexit.register(exit_handler)

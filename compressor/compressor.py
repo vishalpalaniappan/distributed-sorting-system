@@ -3,6 +3,7 @@ import atexit
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 
+COMPRESS_THRESHOLD = 30
 
 def exit_handler():
     '''
@@ -14,19 +15,27 @@ def exit_handler():
     conn.close()
     sched.shutdown()
 
-def getFirstNEntries():
+
+def deleteFirstNEntries(N):
+    '''
+        Deletes the first N entries from the database.
+    '''
+    global conn, cursor
+    
+    statement = "DELETE FROM tempdata LIMIT " + str(N)
+    cursor.execute(statement) 
+    conn.commit()
+
+def getFirstNEntries(N):
     '''
         Get the first N entries from the database.
     '''
     global conn, cursor
 
-    statement = '''SELECT * from tempdata LIMIT 3'''
-    cursor.execute(statement) 
-    entries = cursor.fetchall() 
-    
-    statement = '''DELETE FROM tempdata LIMIT 3'''
+    statement = "SELECT * from tempdata LIMIT " + str(N)
     cursor.execute(statement) 
     conn.commit()
+    entries = cursor.fetchall() 
 
     return entries
 
@@ -46,12 +55,17 @@ def getNumberOfEntries():
     return numEntries
 
 def compress():
+    '''
+        Scheduled job to compress data when number of 
+        entries reaches a threshold.
+    '''
     count = getNumberOfEntries()
-    print("COUNT:", count)
+    print("Number of Entries:", count)
 
-    if count > 3:
-        entries = getFirstNEntries()
-        print(entries)
+    if count >= COMPRESS_THRESHOLD:
+        entries = getFirstNEntries(COMPRESS_THRESHOLD)
+        # ADD COMPRESSION LOGIC HERE
+        deleteFirstNEntries(COMPRESS_THRESHOLD)
         
 def main():
     '''
@@ -62,7 +76,7 @@ def main():
     cursor = conn.cursor()
 
     sched = BackgroundScheduler(standalone=True)
-    sched.add_job(compress, 'interval', seconds=5)
+    sched.add_job(compress, 'interval', seconds=1)
     sched.start()
 
     while True:
