@@ -4,6 +4,16 @@ from random import randrange
 import sqlite3
 import atexit
 
+def exit_handler():
+    '''
+        Close the database connection on exit.
+    '''
+    print("Shutting down logger.")
+    global conn, cursor
+    cursor.close()
+    conn.commit()
+    conn.close()
+
 def generate_data():
     '''
         Generates a random data node.
@@ -13,14 +23,6 @@ def generate_data():
         "temperature":randrange(10),
         "speed":randrange(10),
     }
-
-def exit_handler():
-    '''
-        Close the database connection on exit.
-    '''
-    global conn, cursor
-    conn.commit()
-    conn.close()
 
 def execute_cursor(data):
     '''
@@ -41,12 +43,14 @@ def execute_cursor(data):
         '"{speed}"')
     ''')
 
+    conn.commit()
+
 def run_logger():
     '''
         Runs the logger
     '''
     global conn, cursor
-    conn = sqlite3.connect("../data.db")
+    conn = sqlite3.connect("../data.db", check_same_thread=False, timeout=10)
     cursor = conn.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS tempdata
