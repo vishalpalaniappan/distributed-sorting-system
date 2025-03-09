@@ -28,7 +28,7 @@ def execute_cursor(data):
     '''
         Inserts data into the database.
     '''    
-    global cursor
+    global conn, cursor
 
     date = time.time()
     id = data["id"]
