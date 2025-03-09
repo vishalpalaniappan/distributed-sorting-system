@@ -4,7 +4,6 @@ import time
 import json
 import gzip
 import os
-import math
 from apscheduler.schedulers.background import BackgroundScheduler
 
 COMPRESS_THRESHOLD = 30
