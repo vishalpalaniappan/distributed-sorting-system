@@ -19,9 +19,11 @@ def uploadFile(file_name, bucket, object_name=None):
     try:
         s3_client.upload_file(file_name, bucket, object_name)
         print("Successfuly uploaded file:", file_name)
+        return True
     except ClientError as e:
         print("Failed to uploaded file:", file_name)
         raise(e)
+
 
 def checkFolder():
     '''
@@ -42,13 +44,12 @@ def checkFolder():
         file = sorted(files)[0]
 
         # Upload file
-        uploadFile(os.path.join(DATA_DIR, file), BUCKET, file)
-
-        # Remove file
-        try:
-            os.remove(os.path.join(DATA_DIR, file))
-        except Exception as e:
-            raise(e)
+        if uploadFile(os.path.join(DATA_DIR, file), BUCKET, file):
+            # Remove file
+            try:
+                os.remove(os.path.join(DATA_DIR, file))
+            except Exception as e:
+                raise(e)
 
 def main(sleep_time=5):
     '''
