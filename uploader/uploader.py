@@ -4,7 +4,7 @@ import time
 from botocore.exceptions import ClientError
 
 DATA_DIR = "../compressed_data"
-BUCKET = "sample-log-json-bucket"
+BUCKET = "asv-sample-bucket"
 
 def uploadFile(file_name, bucket, object_name=None):
     '''
