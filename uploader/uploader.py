@@ -11,6 +11,11 @@ def uploadFile(file_name, bucket, object_name=None):
         Uploads the given file with the given name to the bucket.
     '''
     s3_client = boto3.client('s3')
+
+    # If object_name was not specified, use file_name
+    if object_name is None:
+        object_name = os.path.basename(file_name)
+        
     try:
         s3_client.upload_file(file_name, bucket, object_name)
         print("Successfuly uploaded file:", file_name)
