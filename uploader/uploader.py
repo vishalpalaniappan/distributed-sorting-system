@@ -22,25 +22,42 @@ def checkFolder():
     '''
         Check folder to see if there are files to upload.
     '''
-    files = os.listdir(DATA_DIR)
+    try:
+        if not os.path.exists(DATA_DIR):
+            print(f"Directory {DATA_DIR} does not exist")
+            return False
+            
+        files = os.listdir(DATA_DIR)
+    except Exception as e:
+        print(f"Error accessing directory {DATA_DIR}: {e}")
+        return False
 
     if len(files) > 0:
+        #File oldest file
         file = sorted(files)[0]
-        path = os.path.join(DATA_DIR, file)
-        uploadFile(path, BUCKET, file)
 
+        # Upload file
+        uploadFile(os.path.join(DATA_DIR, file), BUCKET, file)
+
+        # Remove file
         try:
-            os.remove(path)
+            os.remove(os.path.join(DATA_DIR, file))
         except Exception as e:
             raise(e)
 
-def main():
+def main(sleep_time=5):
     '''
         Main Loop
     '''
-    while True:
-        checkFolder()
-        time.sleep(5)
+    try:
+        print(f"Starting uploader. Monitoring {DATA_DIR} every {sleep_time} seconds...")
+        while True:
+            checkFolder()
+            time.sleep(sleep_time)
+    except KeyboardInterrupt:
+        print("Uploader stopped by user")
+    except Exception as e:
+        print(f"Uploader stopped due to error: {e}")
 
 if __name__ == "__main__":
     main()
