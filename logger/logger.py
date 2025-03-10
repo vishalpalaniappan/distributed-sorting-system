@@ -34,14 +34,14 @@ def execute_cursor(data):
     global conn, cursor
 
     date = time.time()
-    id = data["id"]
+    uid = data["id"]
     temperature = data["temperature"]
     speed = data["speed"]
 
     cursor.execute(f'''
         INSERT INTO tempdata VALUES (
         '"{date}"',
-        '"{id}"',
+        '"{uid}"',
         '"{temperature}"',
         '"{speed}"')
     ''')
