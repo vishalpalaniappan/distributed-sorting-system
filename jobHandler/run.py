@@ -8,7 +8,7 @@ from websockets.asyncio.server import serve
 msgs = {}
 
 MSG_TYPE = {
-    "CONNECT": 1,
+    "REGISTER": 1,
     "REQUEST": 2,
     "RESPONSE": 3
 }
@@ -39,7 +39,7 @@ async def handle_message(websocket):
         message = json.loads(message)
 
         # Connection
-        if message["code"] == MSG_TYPE["CONNECT"]:
+        if message["code"] == MSG_TYPE["REGISTER"]:
             if "user" in message:
                 client = websocket
                 await websocket.send(json.dumps(message))
