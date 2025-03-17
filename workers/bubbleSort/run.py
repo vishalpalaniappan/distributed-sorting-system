@@ -2,7 +2,7 @@
 import websockets
 import asyncio
 import json
-from bubbleSort import bubbleSort
+from bubbleSort import bubble_sort
 
 connection = websockets.connect(uri='ws://localhost:8765')
 
