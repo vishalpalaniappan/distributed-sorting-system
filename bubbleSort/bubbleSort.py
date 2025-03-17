@@ -43,7 +43,7 @@ async def main():
                 global IS_REGISTERED
                 IS_REGISTERED = True
             else:
-                print(f"Task: {message["type"]}, Value:{message["data"]}")
+                print(f"Task: {message['type']}, Value:{message['data']}")
                 resp = {
                     "code": MSG_TYPE["RESPONSE"],
                     "worker": True,
