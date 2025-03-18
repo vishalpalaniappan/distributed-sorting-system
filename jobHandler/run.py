@@ -5,7 +5,8 @@ import argparse
 import json
 from websockets.asyncio.server import serve
 
-msgs = {}
+workers = {}
+client = None
 
 MSG_TYPE = {
     "REGISTER": 1,
@@ -13,47 +14,93 @@ MSG_TYPE = {
     "RESPONSE": 3
 }
 
-client = None
-async def handle_message(websocket):
+async def send_to_worker(websocket, message):
     '''
-        Handles messages from websocket and echos a response.
+        Send message to the given worker.
+    '''
+    await websocket.send(json.dumps(message))
 
-        Registering example:
+async def send_to_client(websocket, message):
+    '''
+        Send message to the given client.
+    '''
+    await websocket.send(json.dumps(message))
+
+async def handle_register(websocket, message):
+    '''
+        Handle register operations.
+    '''
+    global client, workers  
+    if "client" in message:
+        client = websocket
+        await send_to_client(client, message)
+    elif "worker" in message:
+        workers[message["type"]] = websocket
+        await send_to_worker(workers[message["type"]], message)
+
+async def handle_request(websocket, message): 
+    '''
+        Handle incoming requests and pass to relevant worker.
+    '''
+    if message["type"] in workers:
+        await workers[message["type"]].send(json.dumps(message))
+    else:
+        message["response"] = f"message['type'] worker isn't initialized"
+        print(f"{message['type']} worker isn't initialized")
+        await websocket.send(json.dumps(message))
+
+async def handle_response(message):   
+    '''
+        Handle response from worker and pass to client.
+    '''
+    global client, workers  
+    if client:
+        await send_to_client(client, message)
+    else:
+        message["response"] = "Client isn't initialized"
+        print(f"client isn't initialized")
+        await send_to_client(client, message)
+
+async def handle_message(websocket, message):
+    print(f"\nReceived message: {message}")
+
+    if message["code"] == MSG_TYPE["REGISTER"]:        
+        await handle_register(websocket, message)
+    elif message["code"] == MSG_TYPE["REQUEST"]:           
+        await handle_request(websocket, message)
+    elif message["code"] == MSG_TYPE["RESPONSE"]:        
+        await handle_response(message)
+
+async def receieve_message(websocket):
+    '''
+        Handles messages from websocket.
+
+        1. Workers register using 
         {
             "code": 1,
-            "user": true
+            "type": "bubbleSort"
+            "worker": True
         }
-        
-        Sorting example:
+
+        2. Client Registers using
+        {
+            "code": 1,
+            "client": True
+        }
+
+        3. Client runs job using
         {
             "code": 2,
-            "type": "mergeSort",
-            "data": [9323, 5, 8, 0, 2],
-            "user": true
+            "client": True,
+            "type": "bubbleSort",
+            "data": [13,6,3,12,3]
         }
     '''
-    global client, msgs
     async for message in websocket:
-        print(f"Received message: {message}")
-
         message = json.loads(message)
+        asp_uid = message["asp_uid"]
+        await handle_message(websocket=websocket, message=message)
 
-        # Connection
-        if message["code"] == MSG_TYPE["REGISTER"]:
-            if "user" in message:
-                client = websocket
-                await websocket.send(json.dumps(message))
-            elif "worker" in message:
-                msgs[message["type"]] = websocket
-                await websocket.send(json.dumps(message))
-
-        # Request submitted by user
-        if message["code"] == MSG_TYPE["REQUEST"]:           
-            await msgs[message["type"]].send(json.dumps(message))
-
-        # Response from worker
-        if message["code"] == MSG_TYPE["RESPONSE"]:           
-            await client.send(json.dumps(message))
 
 async def main():
     '''
@@ -74,7 +121,7 @@ async def main():
     args = parser.parse_args()
 
     print(f"Starting WebSocket server on {args.host}:{args.port}")
-    async with serve(handle_message, args.host, args.port) as server:
+    async with serve(receieve_message, args.host, args.port) as server:
         await server.serve_forever()
 
 if __name__ == "__main__":

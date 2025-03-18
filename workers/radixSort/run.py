@@ -4,7 +4,7 @@ import asyncio
 import json
 from radixSort import radixSort
 
-connection = websockets.connect(uri='ws://localhost:8765')
+connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
 
 MSG_TYPE = {
     "REGISTER": 1,
@@ -15,25 +15,43 @@ MSG_TYPE = {
 IS_REGISTERED = False
 
 async def main():
+    '''
+        Main loop receives jobs, executes them and responds.
+    '''
     async with connection as websocket:
-        await websocket.send('{"code": 1, "worker": true, "type": "radixSort"}')
 
+        # Send message to register the worker.
+        await websocket.send(json.dumps({
+            "code": MSG_TYPE["REGISTER"],
+            "worker": True,
+            "type": "radixSort"
+        }))
+
+        # Listen for messages
         async for message in websocket:
             message = json.loads(message)
 
             if message["code"] == MSG_TYPE["REGISTER"]:
+                print(f"Registered {message['type']} worker.")
                 global IS_REGISTERED
                 IS_REGISTERED = True
             else:
+                # Receieve Task
                 print(f"Task: {message['type']}, Value:{message['data']}")
+
+                # Execute Task
+                sortedList = radixSort(message["data"])
                 resp = {
                     "code": MSG_TYPE["RESPONSE"],
                     "worker": True,
                     "type": "radixSort",
-                    "value": radixSort(message["data"])
+                    "value": sortedList
                 }
-                await websocket.send(json.dumps(resp))
 
+                # Send response
+                await websocket.send(json.dumps(resp))
+            
         await websocket.close()
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
