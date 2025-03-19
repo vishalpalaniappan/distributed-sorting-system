@@ -51,9 +51,8 @@ async def main():
         try:
             async for message in websocket:
                 asp_uid = str(uuid.uuid4())
-
                 await sendRandomJob(websocket= websocket, asp_uid= asp_uid)
-                time.sleep(2)
+                time.sleep(random.randrange(1, 10))
         except KeyboardInterrupt:
             print('interrupted!')
         except:
