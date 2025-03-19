@@ -37,8 +37,6 @@ async def handle_request(message):
     return resp
 
 async def handle_message(websocket, message):
-    message = json.loads(message)
-    asp_uid = message["asp_uid"]
 
     if message["code"] == MSG_TYPE["REQUEST"]:
         response = await handle_request(message=message)
@@ -62,7 +60,11 @@ async def receieve_message():
             
         # Listen for messages
         async for message in websocket:
+            message = json.loads(message)
+            asp_uid = message["asp_uid"]
+            '''adli-trace-id-start message["asp_uid"]'''
             await handle_message(websocket=websocket, message=message)
+            '''adli-trace-id-end message["asp_uid"]'''
 
         await websocket.close()
 
