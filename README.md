@@ -20,4 +20,6 @@ To run the system, start the program in the following order:
 - Start Workers
 - Start Simulated Client
 
+I will automate this process soon, I am just manually running the programs to generate logs that I can use to extract system level traces.
+
 
