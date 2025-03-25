@@ -39,8 +39,8 @@ async def sendRandomJob(websocket):
     await websocket.send(json.dumps({
         "code": MSG_TYPE["REQUEST"],
         "worker": True,
-        "type": JOB_TYPES[random.randint(0,2)],
-        "user": USERS[random.randint(0,2)],
+        "type": JOB_TYPES[random.randint(0, len(JOB_TYPES) - 1)],
+        "user": USERS[random.randint(0, len(USERS) - 1)],
         "data": random.sample(range(6, 101), random.randint(5,15)),
         "asp_uid": asp_uid
     }))
