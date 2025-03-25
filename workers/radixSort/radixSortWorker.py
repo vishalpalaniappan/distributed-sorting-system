@@ -17,13 +17,20 @@ IS_REGISTERED = False
 
 
 async def send_response(websocket, response):
+    '''
+        Send response to job handler.
+    '''
     await websocket.send(json.dumps(response))
 
 async def handle_request(message):
-    # Receieve Task
+    '''
+        Handle request from job handler.
+    '''
+    # Print task info
     print(f"\nTask: {message['type']}")
     print(f"UID: {message['asp_uid']}")
     print(f"Val: {message['data']}")
+    print(f"User: {message['user']}")
 
     # Execute Task
     n = len(message["data"])
@@ -33,14 +40,35 @@ async def handle_request(message):
         "worker": True,
         "type": "radixSort",
         "value": sortedList,
-        "asp_uid": message["asp_uid"]
+        "asp_uid": message["asp_uid"],
+        "user": message["user"]
     }
     return resp
 
 async def handle_message(websocket, message):
+    '''
+        Handle the received message.
+    '''
+    message = json.loads(message)
+    asp_uid = message["asp_uid"]
+
     if message["code"] == MSG_TYPE["REQUEST"]:
         response = await handle_request(message=message)
         await send_response(websocket=websocket, response=response)
+
+async def register(websocket):
+    '''
+        Register the worker with the job handler.
+    '''
+    asp_uid = str(uuid.uuid4())
+
+    # Send message to register the worker.
+    await websocket.send(json.dumps({
+        "code": MSG_TYPE["REGISTER"],
+        "worker": True,
+        "type": "radixSort",
+        "asp_uid": asp_uid
+    }))
 
 
 async def receieve_message():
@@ -48,23 +76,10 @@ async def receieve_message():
         Main loop receives jobs, executes them and responds.
     '''
     async with connection as websocket:
-        asp_uid = str(uuid.uuid4())
-
-        # Send message to register the worker.
-        await websocket.send(json.dumps({
-            "code": MSG_TYPE["REGISTER"],
-            "worker": True,
-            "type": "radixSort",
-            "asp_uid": asp_uid
-        }))
-            
+        await register(websocket=websocket)
         # Listen for messages
         async for message in websocket:
-            message = json.loads(message)
-            asp_uid = message["asp_uid"]
-            '''adli-trace-id-start message["asp_uid"]'''
             await handle_message(websocket=websocket, message=message)
-            '''adli-trace-id-end message["asp_uid"]'''
 
         await websocket.close()
 

@@ -20,6 +20,15 @@ JOB_TYPES = [
     "radixSort"
 ]
 
+USERS = [
+    "user1",
+    "user2",
+    "user3",
+    "user4",
+    "user5",
+]
+
+
 IS_REGISTERED = False
 
 async def sendRandomJob(websocket, asp_uid):
@@ -28,6 +37,7 @@ async def sendRandomJob(websocket, asp_uid):
         "code": MSG_TYPE["REQUEST"],
         "worker": True,
         "type": JOB_TYPES[random.randint(0,2)],
+        "user": USERS[random.randint(0,2)],
         "data": random.sample(range(6, 101), random.randint(5,15)),
         "asp_uid": asp_uid
     }))
