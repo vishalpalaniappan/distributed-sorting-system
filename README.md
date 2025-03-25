@@ -2,12 +2,13 @@ This is a sample system used to generate CDL files that can be used to extract u
 
 ![Simplified System Diagram](docs/systemDiagram.png)
 
-The system consists of 4 programs:
+The system consists of 5 programs:
 
 - Job Handler 
 - Merge Sort Worker
 - Radix Sort Worker
-- Bubble Sort Worker 
+- Bubble Sort Worker
+- Simulated Client
 
 The job handler starts a websocket server which accepts incoming connections from the client and each of the workers. When the workers connect to the job handler, they are registered and the type of they job they process is indexed. 
 
