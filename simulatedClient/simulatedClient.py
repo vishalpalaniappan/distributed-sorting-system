@@ -28,11 +28,14 @@ USERS = [
     "user5",
 ]
 
-
 IS_REGISTERED = False
 
-async def sendRandomJob(websocket, asp_uid):
-    # Send response
+async def sendRandomJob(websocket):
+    '''
+        Send a random job from a random user to the jobHandler.
+    '''
+    asp_uid = str(uuid.uuid4())
+    
     await websocket.send(json.dumps({
         "code": MSG_TYPE["REQUEST"],
         "worker": True,
@@ -42,26 +45,27 @@ async def sendRandomJob(websocket, asp_uid):
         "asp_uid": asp_uid
     }))
 
+async def registerClient(websocket):
+    '''
+        Register the client.
+    '''
+    asp_uid = str(uuid.uuid4())
+    await websocket.send(json.dumps({
+        "code": MSG_TYPE["REGISTER"],
+        "client": True,
+        "asp_uid": asp_uid
+    }))
+
 async def main():
     '''
         Main loop receives jobs, executes them and responds.
     '''
     async with connection as websocket:
-
-        asp_uid = str(uuid.uuid4())
-
-        # Send message to register the worker.
-        await websocket.send(json.dumps({
-            "code": MSG_TYPE["REGISTER"],
-            "client": True,
-            "asp_uid": asp_uid
-        }))
-
+        await registerClient(websocket=websocket)
         time.sleep(2)
         try:
             async for message in websocket:
-                asp_uid = str(uuid.uuid4())
-                await sendRandomJob(websocket= websocket, asp_uid= asp_uid)
+                await sendRandomJob(websocket= websocket)
                 time.sleep(random.randrange(1, 10))
         except KeyboardInterrupt:
             print('interrupted!')
@@ -71,14 +75,5 @@ async def main():
         await websocket.close()
 
 
-async def main2():
-    async with connection as websocket:
-
-         # Listen for messages
-        async for message in websocket:
-            print(message)
-
-
 if __name__ == "__main__":
     asyncio.run(main())
-    asyncio.run(main2())
