@@ -1,3 +1,4 @@
 .cache.sqlite
 data.db
 compressed_data
+__pycache__
