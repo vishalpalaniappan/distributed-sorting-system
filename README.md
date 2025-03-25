@@ -15,5 +15,9 @@ When the client connects to the job handler, it first registers the client conne
 
 The simulateClient.py program connects to the job handler and periodically sends jobs to the job handler from different users and accepts the results.
 
+To run the system, start the program in the following order:
+- Job Handler
+- Start Workers
+- Start Simulated Client
 
 

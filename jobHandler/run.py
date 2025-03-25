@@ -62,6 +62,11 @@ async def handle_response(message):
         await send_to_client(client, message)
 
 async def handle_message(websocket, message):
+    '''
+        Handle message received by client.
+    '''
+    message = json.loads(message)
+    asp_uid = message["asp_uid"]
     print(f"\nReceived message: {message}")
 
     if message["code"] == MSG_TYPE["REGISTER"]:        
@@ -97,8 +102,6 @@ async def receieve_message(websocket):
         }
     '''
     async for message in websocket:
-        message = json.loads(message)
-        asp_uid = message["asp_uid"]
         await handle_message(websocket=websocket, message=message)
 
 
