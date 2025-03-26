@@ -62,13 +62,15 @@ async def register(websocket):
     '''
     asp_uid = str(uuid.uuid4())
 
-    # Send message to register the worker.
-    await websocket.send(json.dumps({
+    response = {
         "code": MSG_TYPE["REGISTER"],
         "worker": True,
         "type": "radixSort",
         "asp_uid": asp_uid
-    }))
+    }
+
+    # Send message to register the worker.
+    await send_response(websocket=websocket, response=response)
 
 
 async def receieve_message():
