@@ -1,0 +1,8 @@
+{
+    "name": "Job Handler",
+    "description": "A tool to handle jobs passed to the distributed sorting system.",
+    "version": "0.0",
+    "language": "python",
+    "systemId": 239287482,
+    "systemVersion": "0.0"
+}
