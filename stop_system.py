@@ -6,7 +6,7 @@ def stopProcess(path):
     '''
         Stops the process using the pm2 stop command.
     '''
-    result = subprocess.run(["pm2", "stop", path])
+    result = subprocess.run(["pm2", "delete", path])
     print(result)
 
 
@@ -19,6 +19,6 @@ if __name__ == "__main__":
         "./workers/radixSort/radixSortWorker.py",
         "./workers/mergeSort/mergeSortWorker.py"
     ]
-    
+
     for process in processes:
         stopProcess(process)
