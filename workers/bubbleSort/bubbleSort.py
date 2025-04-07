@@ -8,7 +8,10 @@ def bubble_sort(arr):
             if arr[i] > arr[i + 1]:
 
                 # Swap elements if they are in the wrong order
-                arr[i], arr[i + 1] = arr[i + 1], arr[i]
+                temp1 = arr[i + 1]
+                temp2 = arr[i]
+                arr[i] = temp1
+                arr[i + 1] = temp2
                 swapped = True
         
         if not swapped:
