@@ -1,8 +1,0 @@
-{
-    "name": "Radix Sort",
-    "description": "A tool to receive jobs over a websocket server and return sorted results.",
-    "version": "0.0",
-    "language": "python",
-    "systemId": 239287482,
-    "systemVersion": "0.0"
-}

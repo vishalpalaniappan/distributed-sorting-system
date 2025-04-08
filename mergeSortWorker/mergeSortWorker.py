@@ -2,8 +2,18 @@
 import websockets
 import asyncio
 import json
-from radixSort import radixSort
+from mergeSort import mergeSort
 import uuid
+
+'''
+{
+    "type": "adli_metadata",
+    "name": "Merge Sort",
+    "description": "A program to receive sorting jobs over a websocket server and return the sorted results.",
+    "version": "0.0",
+    "language": "python"
+}
+'''
 
 connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
 
@@ -14,7 +24,6 @@ MSG_TYPE = {
 }
 
 IS_REGISTERED = False
-
 
 async def send_response(websocket, response):
     '''
@@ -32,13 +41,13 @@ async def handle_request(message):
     print(f"Val: {message['data']}")
     print(f"User: {message['user']}")
 
-    # Execute Task
+    # Execute Task   
     n = len(message["data"])
-    sortedList = radixSort(message["data"])
+    sortedList = mergeSort(message["data"], 0, n - 1)
     resp = {
         "code": MSG_TYPE["RESPONSE"],
         "worker": True,
-        "type": "radixSort",
+        "type": "mergeSort",
         "value": sortedList,
         "asp_uid": message["asp_uid"],
         "user": message["user"]
@@ -56,6 +65,7 @@ async def handle_message(websocket, message):
         response = await handle_request(message=message)
         await send_response(websocket=websocket, response=response)
 
+
 async def register(websocket):
     '''
         Register the worker with the job handler.
@@ -65,13 +75,12 @@ async def register(websocket):
     response = {
         "code": MSG_TYPE["REGISTER"],
         "worker": True,
-        "type": "radixSort",
+        "type": "mergeSort",
         "asp_uid": asp_uid
     }
 
     # Send message to register the worker.
     await send_response(websocket=websocket, response=response)
-
 
 async def receieve_message():
     '''
@@ -79,9 +88,14 @@ async def receieve_message():
     '''
     async with connection as websocket:
         await register(websocket=websocket)
-        # Listen for messages
-        async for message in websocket:
-            await handle_message(websocket=websocket, message=message)
+            
+        try:
+            # Listen for messages
+            async for message in websocket:
+                await handle_message(websocket=websocket, message=message)
+        except KeyboardInterrupt:
+            await websocket.close()
+            return
 
         await websocket.close()
 

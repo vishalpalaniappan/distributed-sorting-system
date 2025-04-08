@@ -5,6 +5,16 @@ import argparse
 import json
 from websockets.asyncio.server import serve
 
+'''
+{
+    "type": "adli_metadata",
+    "name": "Job Handler",
+    "description": "A progam to received sorting jobs and pass to collection of workers.",
+    "version": "0.0",
+    "language": "python"
+}
+'''
+
 workers = {}
 client = None
 

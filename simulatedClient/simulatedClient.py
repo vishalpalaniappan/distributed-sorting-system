@@ -6,6 +6,16 @@ import random
 import time
 import uuid
 
+'''
+{
+    "type": "adli_metadata",
+    "name": "Simulated Client",
+    "description": "A progam to send different types of jobs to the job handler from different users.",
+    "version": "0.0",
+    "language": "python"
+}
+'''
+
 connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
 
 MSG_TYPE = {
