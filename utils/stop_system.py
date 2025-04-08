@@ -26,11 +26,11 @@ if __name__ == "__main__":
     rootDir = str(Path(__file__).resolve().parents[1])
 
     processes = [
-        rootDir + "/jobHandler/jobHandler.py",
-        rootDir + "/bubbleSortWorker/bubbleSortWorker.py",
-        rootDir + "/radixSortWorker/radixSortWorker.py",
-        rootDir + "/mergeSortWorker/mergeSortWorker.py",
-        rootDir + "/simulatedClient/simulatedClient.py",
+        str(Path(rootDir) / "jobHandler" / "jobHandler.py"),
+        str(Path(rootDir) / "bubbleSortWorker" / "bubbleSortWorker.py"),
+        str(Path(rootDir) / "radixSortWorker" / "radixSortWorker.py"),
+        str(Path(rootDir) / "mergeSortWorker" / "mergeSortWorker.py"),
+        str(Path(rootDir) / "simulatedClient" / "simulatedClient.py"),
     ]
 
     for process in processes:
