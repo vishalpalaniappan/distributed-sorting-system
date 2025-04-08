@@ -8,12 +8,10 @@ import uuid
 '''
 {
     "type": "adli_metadata",
-    "name": "Simulted Client",
-    "description": "A tool to simulate clients passing jobs to the system.",
+    "name": "Bubble Sort",
+    "description": "A program to receive sorting jobs over a websocket server and return the sorted results.",
     "version": "0.0",
-    "language": "python",
-    "systemId": 239287482,
-    "systemVersion": "0.0"
+    "language": "python"
 }
 '''
 
