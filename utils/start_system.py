@@ -2,6 +2,16 @@ import subprocess
 import time
 from pathlib import Path
 
+'''
+{
+    "type": "adli_metadata",
+    "name": "Start Distributed Sorting System",
+    "description": "Uses PM2 to start each program in system.",
+    "version": "0.0",
+    "language": "python"
+}
+'''
+
 processes = []
 
 def startProcess(path):
