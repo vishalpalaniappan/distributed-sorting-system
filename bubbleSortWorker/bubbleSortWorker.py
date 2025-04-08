@@ -5,6 +5,18 @@ import json
 from bubbleSort import bubble_sort
 import uuid
 
+'''
+{
+    "type": "adli_metadata",
+    "name": "Simulted Client",
+    "description": "A tool to simulate clients passing jobs to the system.",
+    "version": "0.0",
+    "language": "python",
+    "systemId": 239287482,
+    "systemVersion": "0.0"
+}
+'''
+
 connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
 
 MSG_TYPE = {
