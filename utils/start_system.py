@@ -20,7 +20,7 @@ def startProcess(path):
         before the client and workers can connect to it, so I added some delay. 
     '''
     result = subprocess.run(["pm2", "start", path, "--interpreter", "/usr/bin/python3"])
-    time.sleep(0.5)
+    time.sleep(1)
     print(result)
 
 
