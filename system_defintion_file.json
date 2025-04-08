@@ -5,17 +5,13 @@
         "systemVersion": "0.0",
         "systemId" : "1234"
     },
-    "source": [
-        {
-            "programs": [
-                "simulatedClient/simulatedClient.py",
-                "workers/radixSort/radixSortWorker.py",
-                "workers/mergeSort/mergeSortWorker.py",
-                "workers/bubbleSort/bubbleSortWorker.py",
-                "jobHandler/jobHandler.py",
-                "utils/start_system.py",
-                "utils/stop_system.py"
-            ]
-        }
+    "programs": [
+        "simulatedClient/simulatedClient.py",
+        "radixSortWorker/radixSortWorker.py",
+        "mergeSortWorker/mergeSortWorker.py",
+        "bubbleSortWorker/bubbleSortWorker.py",
+        "jobHandler/jobHandler.py",
+        "utils/start_system.py",
+        "utils/stop_system.py"
     ]
 }
