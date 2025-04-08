@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path
 
 processes = []
 
@@ -12,12 +13,14 @@ def stopProcess(path):
 
 if __name__ == "__main__":
 
+    rootDir = str(Path(__file__).resolve().parents[1])
+
     processes = [
-        "./jobHandler/jobHandler.py",
-        "./simulatedClient/simulatedClient.py",
-        "./workers/bubbleSort/bubbleSortWorker.py",
-        "./workers/radixSort/radixSortWorker.py",
-        "./workers/mergeSort/mergeSortWorker.py"
+        rootDir + "/jobHandler/jobHandler.py",
+        rootDir + "/bubbleSortWorker/bubbleSortWorker.py",
+        rootDir + "/radixSortWorker/radixSortWorker.py",
+        rootDir + "/mergeSortWorker/mergeSortWorker.py",
+        rootDir + "/simulatedClient/simulatedClient.py",
     ]
 
     for process in processes:
