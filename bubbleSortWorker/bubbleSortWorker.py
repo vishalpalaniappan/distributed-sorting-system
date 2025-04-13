@@ -30,6 +30,7 @@ async def send_response(websocket, response):
     '''
         Send response to job handler.
     '''
+    '''adli-encode-output response'''    
     await websocket.send(json.dumps(response))
 
 async def handle_request(message):
@@ -79,6 +80,7 @@ async def register(websocket):
         "asp_uid": asp_uid
     }
 
+    '''adli-encode-output response'''    
     # Send message to register the worker.
     await send_response(websocket=websocket, response=response)
 

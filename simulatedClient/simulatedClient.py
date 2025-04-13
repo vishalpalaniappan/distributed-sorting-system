@@ -45,26 +45,27 @@ async def sendRandomJob(websocket):
         Send a random job from a random user to the jobHandler.
     '''
     asp_uid = str(uuid.uuid4())
-    
-    await websocket.send(json.dumps({
+    message = {
         "code": MSG_TYPE["REQUEST"],
         "worker": True,
         "type": JOB_TYPES[random.randint(0, len(JOB_TYPES) - 1)],
         "user": USERS[random.randint(0, len(USERS) - 1)],
         "data": random.sample(range(6, 101), random.randint(5,15)),
         "asp_uid": asp_uid
-    }))
+    }
+    '''adli-encode-output message'''    
+    await websocket.send(json.dumps(message))
 
 async def registerClient(websocket):
     '''
         Register the client.
     '''
-    asp_uid = str(uuid.uuid4())
-    await websocket.send(json.dumps({
+    message = {
         "code": MSG_TYPE["REGISTER"],
-        "client": True,
-        "asp_uid": asp_uid
-    }))
+        "client": True
+    }
+    '''adli-encode-output message'''
+    await websocket.send(json.dumps(message))
 
 async def main():
     '''

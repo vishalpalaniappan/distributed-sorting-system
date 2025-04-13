@@ -28,12 +28,14 @@ async def send_to_worker(websocket, message):
     '''
         Send message to the given worker.
     '''
+    '''adli-encode-output message'''
     await websocket.send(json.dumps(message))
 
 async def send_to_client(websocket, message):
     '''
         Send message to the given client.
     '''
+    '''adli-encode-output message'''
     await websocket.send(json.dumps(message))
 
 async def handle_register(websocket, message):
@@ -52,12 +54,13 @@ async def handle_request(websocket, message):
     '''
         Handle incoming requests and pass to relevant worker.
     '''
+    global client, workers  
     if message["type"] in workers:
         await workers[message["type"]].send(json.dumps(message))
     else:
         message["response"] = f"message['type'] worker isn't initialized"
         print(f"{message['type']} worker isn't initialized")
-        await websocket.send(json.dumps(message))
+        await send_to_client(client, message)
 
 async def handle_response(message):   
     '''
@@ -76,7 +79,6 @@ async def handle_message(websocket, message):
         Handle message received by client.
     '''
     message = json.loads(message)
-    asp_uid = message["asp_uid"]
     print(f"\nReceived message: {message}")
 
     if message["code"] == MSG_TYPE["REGISTER"]:        

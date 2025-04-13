@@ -30,6 +30,7 @@ async def send_response(websocket, response):
     '''
         Send response to job handler.
     '''
+    '''adli-encode-output response'''    
     await websocket.send(json.dumps(response))
 
 async def handle_request(message):
@@ -78,7 +79,6 @@ async def register(websocket):
         "type": "radixSort",
         "asp_uid": asp_uid
     }
-
     # Send message to register the worker.
     await send_response(websocket=websocket, response=response)
 
