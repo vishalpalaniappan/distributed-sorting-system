@@ -2,15 +2,16 @@ import subprocess
 from pathlib import Path
 
 '''
-{
-    "type": "adli_metadata",
-    "name": "Stop Distributed Sorting System",
-    "description": "Uses PM2 to stop each program in system.",
-    "version": "0.0",
-    "language": "python"
-}
+    {
+        "type": "adli_metadata",
+        "value": {
+            "name": "Stop Distributed Sorting System",
+            "description": "Uses PM2 to stop each program in system.",
+            "version": "0.0",
+            "language": "python"
+        }
+    }
 '''
-
 processes = []
 
 def stopProcess(path):

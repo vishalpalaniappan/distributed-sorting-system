@@ -6,13 +6,15 @@ from mergeSort import mergeSort
 import uuid
 
 '''
-{
-    "type": "adli_metadata",
-    "name": "Merge Sort",
-    "description": "A program to receive sorting jobs over a websocket server and return the sorted results.",
-    "version": "0.0",
-    "language": "python"
-}
+    {
+        "type": "adli_metadata",
+        "value": {
+            "name": "Merge Sort",
+            "description": "A program to receive sorting jobs over a websocket server and return the sorted results.",
+            "version": "0.0",
+            "language": "python"
+        }
+    }
 '''
 
 connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
