@@ -86,8 +86,6 @@ async def register(websocket):
         "type": "bubbleSort",
         "asp_uid": asp_uid
     }
-
-    '''adli-encode-output response'''    
     # Send message to register the worker.
     await send_response(websocket=websocket, response=response)
 

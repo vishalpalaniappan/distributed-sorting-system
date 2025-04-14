@@ -70,7 +70,13 @@ async def registerClient(websocket):
         "code": MSG_TYPE["REGISTER"],
         "client": True
     }
-    '''adli-encode-output message'''
+    
+    '''
+    {
+        "type":"adli_encode_output",
+        "value":["message"]
+    }
+    '''  
     await websocket.send(json.dumps(message))
 
 async def main():
