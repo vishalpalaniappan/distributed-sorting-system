@@ -31,7 +31,12 @@ async def send_response(websocket, response):
     '''
         Send response to job handler.
     '''
-    '''adli-encode-output response'''    
+    '''
+    {
+        "type":"adli_encode_output",
+        "value":["response"]
+    }
+    '''  
     await websocket.send(json.dumps(response))
 
 async def handle_request(message):

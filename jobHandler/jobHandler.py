@@ -29,14 +29,24 @@ async def send_to_worker(websocket, message):
     '''
         Send message to the given worker.
     '''
-    '''adli-encode-output message'''
+    '''
+    {
+        "type":"adli_encode_output",
+        "value":["message"]
+    }
+    '''  
     await websocket.send(json.dumps(message))
 
 async def send_to_client(websocket, message):
     '''
         Send message to the given client.
     '''
-    '''adli-encode-output message'''
+    '''
+    {
+        "type":"adli_encode_output",
+        "value":["message"]
+    }
+    ''' 
     await websocket.send(json.dumps(message))
 
 async def handle_register(websocket, message):

@@ -54,7 +54,12 @@ async def sendRandomJob(websocket):
         "data": random.sample(range(6, 101), random.randint(5,15)),
         "asp_uid": asp_uid
     }
-    '''adli-encode-output message'''    
+    '''
+    {
+        "type":"adli_encode_output",
+        "value":["message"]
+    }
+    '''    
     await websocket.send(json.dumps(message))
 
 async def registerClient(websocket):
