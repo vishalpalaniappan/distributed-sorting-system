@@ -67,7 +67,7 @@ async def handle_request(websocket, message):
     '''
     global client, workers  
     if message["type"] in workers:
-        await workers[message["type"]].send(json.dumps(message))
+        await send_to_worker(workers[message["type"]], message)
     else:
         message["response"] = f"message['type'] worker isn't initialized"
         print(f"{message['type']} worker isn't initialized")
