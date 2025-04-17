@@ -80,8 +80,9 @@ async def registerClient(websocket):
     await websocket.send(json.dumps(message))
 
 
-def receiveFinshedJob(message):
+def processedFinishedJob(message):
     finishedJob = message
+    print(finishedJob)
 
 async def main():
     '''
@@ -92,7 +93,8 @@ async def main():
         time.sleep(2)
         try:
             async for message in websocket:
-                receiveFinshedJob(message)
+                message = json.loads(message)
+                processedFinishedJob(message)
                 await sendRandomJob(websocket= websocket)
                 time.sleep(random.randrange(1, 10))
         except KeyboardInterrupt:
