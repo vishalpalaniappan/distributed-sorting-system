@@ -81,8 +81,8 @@ async def registerClient(websocket):
 
 
 def processedFinishedJob(message):
-    finishedJob = message
-    print(finishedJob)
+    message = json.loads(message)
+    print(f"Finished processing job: {message}")
 
 async def main():
     '''
@@ -93,7 +93,6 @@ async def main():
         time.sleep(2)
         try:
             async for message in websocket:
-                message = json.loads(message)
                 processedFinishedJob(message)
                 await sendRandomJob(websocket= websocket)
                 time.sleep(random.randrange(1, 10))
