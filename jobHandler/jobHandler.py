@@ -141,7 +141,7 @@ async def main():
                         
     parser.add_argument('--port',
                         type=int,
-                        default=8765,
+                        default=8000,
                         help='Port to bind the server to')
     
     args = parser.parse_args()

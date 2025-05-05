@@ -17,7 +17,7 @@ import uuid
     }
 '''
 
-connection = websockets.connect(uri='ws://localhost:8765', ping_interval=None)
+connection = websockets.connect(uri='ws://localhost:8000', ping_interval=None)
 
 MSG_TYPE = {
     "REGISTER": 1,
